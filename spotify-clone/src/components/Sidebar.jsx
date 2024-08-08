@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const Sidebar = () => {
 
- const navigate = useNavigate();
+ const navigate = useNavigate(); 
 
   return (
     <div className="w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex">
