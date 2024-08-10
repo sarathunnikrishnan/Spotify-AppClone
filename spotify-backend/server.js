@@ -16,7 +16,7 @@ connectCloudinary();
 // middlewares
 app.use(express.json());
 app.use(cors());
-
+    
 // initializing routes
 app.use("/api/song", songRouter);   
 app.use("/api/album", albumRouter);    

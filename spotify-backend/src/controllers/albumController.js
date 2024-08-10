@@ -7,7 +7,7 @@ const addAlbum = async (req,res) => {
         
         const name = req.body.name;
         const desc = req.body.desc;
-        const bgColor = req.body.bgColor;
+        const bgColor = req.body.color;
         const imageFile = req.file;
         const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resource_type: "image"});
         
@@ -24,7 +24,7 @@ const addAlbum = async (req,res) => {
         res.json({ success : true, message : "Album added"});
 
      } catch (error) {
-        res.josn({ success : false });
+        res.json({ success : false });
      }
 
 }
