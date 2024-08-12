@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import axios from 'axios';
+import axios from "axios";
 import { url } from "../App";
 import { toast } from "react-toastify";
 
@@ -18,42 +18,56 @@ const AddSong = () => {
     setLoading(true);
 
     try {
+      const formData = new FormData();
 
-       const formData = new FormData();
-         
-       formData.append('name', name);
-       formData.append('desc', desc);
-       formData.append('image', image);
-       formData.append('audio', song);
-       formData.append('album', album);
+      formData.append("name", name);
+      formData.append("desc", desc);
+      formData.append("image", image);
+      formData.append("audio", song);
+      formData.append("album", album);
 
-       const respone = await axios.post(`${url}/api/song/add`, formData);
+      const respone = await axios.post(`${url}/api/song/add`, formData);
 
-       if (respone.data.success) {
-         toast.success("Song Added");
-         setName("");
-         setDesc("");
-         setAlbum("none");
-         setImage(false);
-         setSong(false);
-       } else {
-         toast.error("Something went wrong")
-       }
-
+      if (respone.data.success) {
+        toast.success("Song Added");
+        setName("");
+        setDesc("");
+        setAlbum("none");
+        setImage(false);
+        setSong(false);
+      } else {
+        toast.error("Something went wrong");
+      }
     } catch (error) {
-      
       console.log(error);
-      
-       toast.error("Error occured");
-       
+
+      toast.error("Error occured");
     }
-     setLoading(false);
+    setLoading(false);
   };
+
+  const loadAlbumData = async () => {
+    try {
+      const response = await axios.get(`${url}/api/album/list`);
+
+      if (response.data.success) {
+        setAlbumData(response.data.albums);
+      } else {
+        toast.error("Unable to load albums data");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error Occured");
+    }
+  };
+
+  useEffect(()=>{
+    loadAlbumData();
+  },[])
 
   return loading ? (
     <div className="grid place-items-center min-h-[80vh]">
-      <div className="w-16 h-16 place-self-center border-4 border-gray-400 border-t-gray-800 rounded-full animate-spin">
-      </div>
+      <div className="w-16 h-16 place-self-center border-4 border-gray-400 border-t-gray-800 rounded-full animate-spin"></div>
     </div>
   ) : (
     <form
@@ -129,6 +143,9 @@ const AddSong = () => {
           className="bg-transparent outline-green-600 border-2 border-gray-400 w-[150px]"
         >
           <option value="none">None</option>
+          {
+            albumData.map((item,index)=>(<option value={item.name} key={index}>{item.name}</option>))
+          }
         </select>
       </div>
 
